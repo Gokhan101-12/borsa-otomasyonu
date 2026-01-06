@@ -1,0 +1,30 @@
+name: Borsa Kahini
+
+on:
+  schedule:
+    # Her Pazartesi sabahı Türkiye saati ile 09:30'da çalışır (UTC 06:30)
+    - cron: '30 6 * * 1'
+  workflow_dispatch: # Elle tetiklemek için buton
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodları Çek
+        uses: actions/checkout@v3
+
+      - name: Python Kurulumu
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Kütüphaneleri Yükle
+        run: |
+          pip install pandas numpy yfinance requests
+
+      - name: Analizi Başlat
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py
