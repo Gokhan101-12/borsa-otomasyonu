@@ -13,16 +13,17 @@ jobs:
       - name: Kodları Çek
         uses: actions/checkout@v3
 
-      # Python 3.9 kullanmaya devam etse bile çalışacak önlem
-      - name: Python Kur
+      # Python 3.9'da takılı kalsa bile çalışacak yapı:
+      - name: Python Kurulumu
         uses: actions/setup-python@v4
         with:
           python-version: '3.9' 
 
-      - name: Kütüphaneleri Yükle (Eski ve Kararlı Sürüm)
+      - name: Kütüphaneleri Zorla Yükle
         run: |
           python -m pip install --upgrade pip
-          # Önbelleği kapat (--no-cache-dir) ve eski sağlam sürümü kur
+          # BURASI KRİTİK: yfinance 0.2.18 sürümü Python 3.9 ile sorunsuz çalışır.
+          # --no-cache-dir ekledik ki eski hatalı dosyaları hafızadan silsin.
           pip install pandas numpy requests yfinance==0.2.18 --no-cache-dir
 
       - name: Analizi Başlat
