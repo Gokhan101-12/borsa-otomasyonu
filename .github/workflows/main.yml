@@ -13,17 +13,22 @@ jobs:
       - name: Kodları Çek
         uses: actions/checkout@v4
 
-      # Python 3.11 Kuruyoruz (Cache satırını sildik, hata vermeyecek)
       - name: Python 3.11 Kur
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          # cache: 'pip' satırını sildik, sorun çözüldü.
+
+      # ADIM 1: Önce basit bir mesajla bağlantıyı test et
+      - name: Telegram Bağlantı Testi
+        env:
+          TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d text="⚠️ Gökhan, Bot Bağlantısı Başarılı! Eğer analiz raporu gelmezse, mesaj çok uzun olduğu içindir."
 
       - name: Kütüphaneleri Yükle
         run: |
           python -m pip install --upgrade pip
-          # En güncel sürümleri indiriyoruz
           pip install pandas numpy requests yfinance --upgrade --no-cache-dir
 
       - name: Analizi Başlat
