@@ -1,10 +1,9 @@
-Name: Borsa Kahini
+name: Borsa Kahini
 
 on:
   schedule:
-    # Pazartesi sabah 09:30 (TSİ) için UTC 06:30
     - cron: '30 6 * * 1'
-  workflow_dispatch: # Elle tetiklemek için buton
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,18 +11,19 @@ jobs:
 
     steps:
       - name: Kodları Çek
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
+      # Python 3.9 kullanmaya devam etse bile çalışacak önlem
       - name: Python Kur
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-          cache: 'pip' # Bağımlılıkları önbelleğe alır, hız kazandırır
+          python-version: '3.9' 
 
-      - name: Kütüphaneleri Yükle
+      - name: Kütüphaneleri Yükle (Eski ve Kararlı Sürüm)
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy requests yfinance==0.2.40
+          # Önbelleği kapat (--no-cache-dir) ve eski sağlam sürümü kur
+          pip install pandas numpy requests yfinance==0.2.18 --no-cache-dir
 
       - name: Analizi Başlat
         env:
