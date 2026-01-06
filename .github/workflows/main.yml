@@ -13,18 +13,17 @@ jobs:
       - name: Kodları Çek
         uses: actions/checkout@v4
 
-      # İŞTE ÇÖZÜM BURADA: v2 değil v5 kullanıyoruz.
-      # Bu sayede Python 3.11 GERÇEKTEN kurulacak.
-      - name: Python 3.11 Kur (Zorla)
+      # Python 3.11 Kuruyoruz (Cache satırını sildik, hata vermeyecek)
+      - name: Python 3.11 Kur
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
+          # cache: 'pip' satırını sildik, sorun çözüldü.
 
-      - name: Kütüphaneleri Yükle (En Günceli)
+      - name: Kütüphaneleri Yükle
         run: |
           python -m pip install --upgrade pip
-          # Artık en son sürümü korkmadan kurabiliriz
+          # En güncel sürümleri indiriyoruz
           pip install pandas numpy requests yfinance --upgrade --no-cache-dir
 
       - name: Analizi Başlat
